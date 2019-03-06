@@ -1,6 +1,7 @@
 '''
-    观察者模式: 定义了对象之间的一对多依赖，这样一来，当一个对象改变状态时，它的所以
-               依赖着都会受到通知并自动更新
+    观察者模式: 定义了对象之间的一对多依赖，这样一来，当一个对象改变状态时，
+               它的所以依赖着都会受到通知并自动更新
+    push 模式： 主题主动向已经订阅注册的观察者推送消息
 '''
 
 
@@ -28,13 +29,8 @@ class Subject1:
 
     def push(self):
         for obj, values in self.members.items():
-            obj.context = {value: self.data.get(value) for value in values}
-
-
-class DisplayElement:
-
-    def display():
-        pass
+            data = {value: self.data.get(value) for value in values}
+            obj.update(data)
 
 
 class Observer1:
@@ -43,21 +39,24 @@ class Observer1:
         self.name = name
         self.context = dict()
 
-    def update(self):
-        print("observer %s context:%s" % (self.name, self.context))
+    def update(self, data):
+        self.context = data
+
+    def display(self):
+        pass
 
 
-class CurrentDisplay(Observer1, DisplayElement):
+class CurrentDisplay(Observer1):
 
     def __init__(self, name):
         super().__init__(name)
 
-    def update(self):
-        super().update()
+    def update(self, data):
+        super().update(data)
         self.display()
 
     def display(self):
-        self.context
+        print('current display is:%s' % self.context)
 
 
 if __name__ == '__main__':
@@ -66,13 +65,7 @@ if __name__ == '__main__':
     c = CurrentDisplay('b')
     a.register(b, ['pressure', 'humidity'])
     a.register(c, ['pressure', 'humidity', 'temprature'])
-    b.update()
-    c.update()
     a.set_theme({'pressure': 2})
-    b.update()
-    c.update()
     a.set_theme({'pressure': 200, 'humidity': 22})
-    b.update()
-    c.update()
     a.remove(b)
     # CurrentDisplay().display()
