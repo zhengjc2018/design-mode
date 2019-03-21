@@ -116,7 +116,6 @@ class ChicagoStyleVeggiePizza(Pizza):
         super().__init__('ChicagoStyle Veggie Pizza', 'dough2', 'sauce2')
 
 
-
 if __name__ == '__main__':
     a = NyPizzaStore()
     a.order_pizza('chesse')
